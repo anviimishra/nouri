@@ -1,0 +1,2 @@
+-- Core tables. See docs/architecture.md.
+-- TODO: profiles, goals, data_sources, daily_metrics, workouts, sleep_sessions, ask_log, plan_cache
