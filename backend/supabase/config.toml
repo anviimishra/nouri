@@ -1,0 +1,27 @@
+# Run from /backend:  supabase start   (or from repo root: supabase --workdir backend start)
+project_id = "nouri"
+
+[api]
+port = 54321
+
+[db]
+port = 54322
+major_version = 15
+
+[auth]
+site_url = "http://127.0.0.1:3000"
+
+# Turn on once credentials are in backend/supabase/.env (see backend/README.md)
+[auth.external.apple]
+enabled = false
+client_id = "com.nouri.app"
+secret = "env(SUPABASE_AUTH_APPLE_SECRET)"
+
+[auth.external.google]
+enabled = false
+client_id = "env(SUPABASE_AUTH_GOOGLE_CLIENT_ID)"
+secret = "env(SUPABASE_AUTH_GOOGLE_SECRET)"
+skip_nonce_check = true
+
+[edge_runtime]
+enabled = true

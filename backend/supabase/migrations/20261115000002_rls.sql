@@ -1,0 +1,1 @@
+-- Row-level security: every user table restricted to user_id = auth.uid().

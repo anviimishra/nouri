@@ -1,0 +1,1 @@
+-- query_metrics(plan jsonb): SECURITY INVOKER, whitelisted metrics/aggregations only. No LLM-authored SQL.

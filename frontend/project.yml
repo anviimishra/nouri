@@ -1,0 +1,57 @@
+name: Nouri
+options:
+  bundleIdPrefix: com.nouri
+  deploymentTarget:
+    iOS: "17.0"
+    watchOS: "10.0"
+configs:
+  Debug: debug
+  Release: release
+configFiles:
+  Debug: Config/Debug.xcconfig
+  Release: Config/Release.xcconfig
+packages:
+  NouriKit:
+    path: Packages/NouriKit
+targets:
+  Nouri:
+    type: application
+    platform: iOS
+    sources: [Nouri]
+    dependencies:
+      - package: NouriKit
+      - target: NouriWatch
+    entitlements:
+      path: Nouri/Nouri.entitlements
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.nouri.app
+        INFOPLIST_FILE: Nouri/Info.plist
+  NouriWatch:
+    type: application
+    platform: watchOS
+    sources: [NouriWatch]
+    dependencies:
+      - package: NouriKit
+    entitlements:
+      path: NouriWatch/NouriWatch.entitlements
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.nouri.app.watchkitapp
+        INFOPLIST_FILE: NouriWatch/Info.plist
+  NouriTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [NouriTests]
+    dependencies: [{ target: Nouri }]
+  NouriUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources: [NouriUITests]
+    dependencies: [{ target: Nouri }]
+schemes:
+  Nouri:
+    build: { targets: { Nouri: all } }
+    test: { targets: [NouriTests, NouriUITests] }
+  NouriWatch:
+    build: { targets: { NouriWatch: all } }

@@ -1,0 +1,5 @@
+BUNDLE_ID_PREFIX = com.nouri
+MARKETING_VERSION = 0.1.0
+CURRENT_PROJECT_VERSION = 1
+// DEVELOPMENT_TEAM = XXXXXXXXXX   // set in Secrets.xcconfig
+#include? "Secrets.xcconfig"
