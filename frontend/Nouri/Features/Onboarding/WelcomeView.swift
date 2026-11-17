@@ -21,10 +21,13 @@ struct WelcomeView: View {
         ZStack {
             NouriBackground()
             VStack(spacing: NouriSpacing.lg) {
-                Text("nouri")
-                    .font(.system(.title3, design: .rounded, weight: .bold))
-                    .foregroundStyle(Color.nouriText)
-                    .accessibilityAddTraits(.isHeader)
+                VStack(spacing: NouriSpacing.sm) {
+                    NouriAppMark(size: 56)
+                    Text("nouri")
+                        .font(.system(.title3, design: .rounded, weight: .bold))
+                        .foregroundStyle(Color.nouriText)
+                        .accessibilityAddTraits(.isHeader)
+                }
 
                 MetricPinsHero()
                     .frame(maxHeight: .infinity)
