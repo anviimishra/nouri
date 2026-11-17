@@ -1,37 +1,62 @@
 import SwiftUI
+import NouriDesign
 
+/// Landing carousel: the three things Nouri does (Ask, Connect, Plan), Beli-style.
 struct WelcomeView: View {
     let onStart: () -> Void
+    @State private var slide = 0
 
-    var body: some View {
-        OnboardingPage(title: "Welcome to Nouri",
-                       subtitle: "Your health data, sleep, workouts, and goals in one place. Just ask.",
-                       buttonTitle: "Get started",
-                       action: onStart) {
-            VStack(alignment: .leading, spacing: 16) {
-                FeatureRow(text: "Ask questions in plain language", systemImage: "text.bubble")
-                FeatureRow(text: "See trends across your apps", systemImage: "chart.line.uptrend.xyaxis")
-                FeatureRow(text: "Your data stays private to you", systemImage: "lock")
-            }
-        }
+    struct Slide: Hashable {
+        let title: String
+        let line: String
     }
-}
 
-/// Icon column has a fixed width that scales with Dynamic Type, so the text lines up.
-private struct FeatureRow: View {
-    let text: String
-    let systemImage: String
-    @ScaledMetric(relativeTo: .body) private var iconWidth = 28.0
+    static let slides = [
+        Slide(title: "Ask", line: "“How did my sleep change during finals?” Ask about your health in plain words."),
+        Slide(title: "Connect", line: "Apple Health, Strava, Oura, and more in one place. No more juggling apps."),
+        Slide(title: "Plan", line: "Workouts that fit your schedule and adapt as you go."),
+    ]
 
     var body: some View {
-        HStack(alignment: .firstTextBaseline, spacing: 12) {
-            Image(systemName: systemImage)
-                .frame(width: iconWidth)
-                .foregroundStyle(.tint)
-                .accessibilityHidden(true)
-            Text(text)
+        ZStack {
+            NouriBackground()
+            VStack(spacing: NouriSpacing.lg) {
+                Text("nouri")
+                    .font(.system(.title3, design: .rounded, weight: .bold))
+                    .foregroundStyle(Color.nouriText)
+                    .accessibilityAddTraits(.isHeader)
+
+                MetricPinsHero()
+                    .frame(maxHeight: .infinity)
+
+                TabView(selection: $slide) {
+                    ForEach(Array(Self.slides.enumerated()), id: \.offset) { index, item in
+                        VStack(spacing: NouriSpacing.sm) {
+                            Text(item.title)
+                                .font(.nouriDisplay)
+                                .foregroundStyle(Color.nouriText)
+                            Text(item.line)
+                                .font(.nouriBody)
+                                .foregroundStyle(Color.nouriTextSecondary)
+                                .multilineTextAlignment(.center)
+                        }
+                        .padding(.horizontal, NouriSpacing.sm)
+                        .frame(maxHeight: .infinity, alignment: .top)
+                        .tag(index)
+                    }
+                }
+                .tabViewStyle(.page(indexDisplayMode: .never))
+                .frame(height: 150)
+
+                PageDots(current: slide + 1, total: Self.slides.count)
+
+                Button("Get started", action: onStart)
+                    .buttonStyle(.nouriPrimary)
+            }
+            .padding(.horizontal, NouriSpacing.lg)
+            .padding(.bottom, NouriSpacing.sm)
         }
-        .font(.body)
+        .toolbar(.hidden, for: .navigationBar)
     }
 }
 

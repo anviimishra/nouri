@@ -1,5 +1,6 @@
 import SwiftUI
 import NouriKit
+import NouriDesign
 
 /// Welcome → Connect Sources → Goals → Sync Progress, with standard back navigation.
 struct OnboardingFlow: View {
@@ -16,6 +17,7 @@ struct OnboardingFlow: View {
                     }
                 }
         }
+        .tint(Color.nouriText)
         .alert("Something went wrong", isPresented: .constant(model.errorMessage != nil)) {
             Button("OK") { model.errorMessage = nil }
         } message: {
@@ -24,37 +26,53 @@ struct OnboardingFlow: View {
     }
 }
 
-/// Shared layout for onboarding screens: scrollable content with a pinned primary button.
+/// Shared onboarding layout: headline and one line on top, optional content,
+/// then step dots, one primary action, and an optional text link at the bottom.
 struct OnboardingPage<Content: View>: View {
+    let step: Int
     let title: String
     let subtitle: String
-    let buttonTitle: String
-    var buttonDisabled = false
-    let action: () -> Void
+    let primaryTitle: String
+    var primaryDisabled = false
+    let primaryAction: () -> Void
+    var linkTitle: String?
+    var linkAction: (() -> Void)?
     @ViewBuilder let content: Content
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 24) {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text(title).font(.largeTitle.bold())
-                    Text(subtitle).font(.body).foregroundStyle(.secondary)
+        ZStack {
+            NouriBackground()
+            ScrollView {
+                VStack(alignment: .leading, spacing: NouriSpacing.xl) {
+                    VStack(alignment: .leading, spacing: NouriSpacing.sm) {
+                        Text(title).font(.nouriTitle).foregroundStyle(Color.nouriText)
+                        Text(subtitle).font(.nouriBody).foregroundStyle(Color.nouriTextSecondary)
+                    }
+                    content
                 }
-                content
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, NouriSpacing.lg)
+                .padding(.top, NouriSpacing.md)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(24)
         }
         .safeAreaInset(edge: .bottom) {
-            Button(action: action) {
-                Text(buttonTitle).frame(maxWidth: .infinity)
+            VStack(spacing: NouriSpacing.md) {
+                PageDots(current: step, total: 3)
+                VStack(spacing: NouriSpacing.xs) {
+                    Button(primaryTitle, action: primaryAction)
+                        .buttonStyle(.nouriPrimary)
+                        .disabled(primaryDisabled)
+                    if let linkTitle, let linkAction {
+                        Button(linkTitle, action: linkAction).buttonStyle(.nouriLink)
+                    }
+                }
             }
-            .buttonStyle(.borderedProminent)
-            .controlSize(.large)
-            .disabled(buttonDisabled)
-            .padding(24)
-            .background(.background)
+            .padding(.horizontal, NouriSpacing.lg)
+            .padding(.bottom, NouriSpacing.sm)
+            .background(Color.nouriCanvas)
         }
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(.hidden, for: .navigationBar)
     }
 }
 

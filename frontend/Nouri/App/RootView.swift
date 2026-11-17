@@ -33,14 +33,38 @@ struct RootView: View {
 
     private func load() async {
         guard phase == .loading else { return }
-        if (try? await profiles.isOnboarded()) == true {
+        let forceOnboarding = DebugLaunch.onboardingSteps != nil
+        if !forceOnboarding, (try? await profiles.isOnboarded()) == true {
             phase = .home
         } else {
-            onboarding = OnboardingViewModel(health: health, profiles: profiles) {
+            let model = OnboardingViewModel(health: health, profiles: profiles) {
                 phase = .home
             }
+            if let steps = DebugLaunch.onboardingSteps { model.path = steps }
+            onboarding = model
             phase = .onboarding
         }
+    }
+}
+
+/// Debug-only launch arguments for reviewing screens without tapping through.
+/// `-onboardingStep connect|goals|sync` opens onboarding at that step.
+private enum DebugLaunch {
+    static var onboardingSteps: [OnboardingStep]? {
+        #if DEBUG
+        let args = ProcessInfo.processInfo.arguments
+        guard let i = args.firstIndex(of: "-onboardingStep"), i + 1 < args.count else { return nil }
+        let all: [OnboardingStep] = [.connectSources, .goals, .syncProgress]
+        switch args[i + 1] {
+        case "welcome": return []
+        case "connect": return Array(all.prefix(1))
+        case "goals": return Array(all.prefix(2))
+        case "sync": return all
+        default: return nil
+        }
+        #else
+        return nil
+        #endif
     }
 }
 

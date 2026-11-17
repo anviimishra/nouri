@@ -1,61 +1,50 @@
 import SwiftUI
+import NouriDesign
 
 struct ConnectSourcesView: View {
     let model: OnboardingViewModel
 
     var body: some View {
-        OnboardingPage(title: "Connect your apps",
-                       subtitle: "Nouri reads from Apple Health, which also collects data from your other fitness apps.",
-                       buttonTitle: "Continue",
-                       action: model.continueToGoals) {
-            SourceCard(name: "Apple Health", systemImage: "heart.fill",
-                       detail: "Sleep, heart rate, workouts, steps, and more.") {
-                if model.healthConnected {
-                    Label("Connected", systemImage: "checkmark.circle.fill")
-                        .foregroundStyle(.green)
-                } else {
-                    Button("Connect") { Task { await model.connectHealth() } }
-                        .buttonStyle(.bordered)
-                        .disabled(model.isConnectingHealth)
+        OnboardingPage(step: 1,
+                       title: "Connect your apps",
+                       subtitle: "Nouri reads from Apple Health, which already collects data from your other fitness apps.",
+                       primaryTitle: "Continue",
+                       primaryAction: model.continueToGoals) {
+            VStack(alignment: .leading, spacing: NouriSpacing.md) {
+                NouriCard {
+                    HStack(spacing: NouriSpacing.md) {
+                        IconBadge(systemImage: "heart.fill", tint: .nouriClayInk)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Apple Health").font(.nouriHeadline).foregroundStyle(Color.nouriText)
+                            Text("Sleep, heart, workouts, steps").font(.nouriCaption).foregroundStyle(Color.nouriTextSecondary)
+                        }
+                        Spacer(minLength: NouriSpacing.sm)
+                        connectControl
+                    }
                 }
-            }
+                .nouriShine(value: model.healthConnected)
 
-            Text("Via Apple Health").font(.headline)
-            ForEach(Self.viaHealthApps, id: \.self) { app in
-                SourceCard(name: app, systemImage: "arrow.triangle.2.circlepath",
-                           detail: "Turn on Apple Health sync in the \(app) app's settings, and Nouri will see it automatically.") {
-                    EmptyView()
-                }
+                Text("Strava, Oura, Garmin, and WHOOP come in through Apple Health. Turn on Apple Health sync in each app's settings.")
+                    .font(.nouriCaption)
+                    .foregroundStyle(Color.nouriTextSecondary)
             }
         }
-        .navigationBarTitleDisplayMode(.inline)
     }
 
-    static let viaHealthApps = ["Strava", "Oura", "Garmin Connect", "WHOOP"]
-}
-
-private struct SourceCard<Trailing: View>: View {
-    let name: String
-    let systemImage: String
-    let detail: String
-    @ViewBuilder let trailing: Trailing
-
-    var body: some View {
-        HStack(alignment: .top, spacing: 12) {
-            Image(systemName: systemImage)
-                .font(.title2)
-                .foregroundStyle(.tint)
-                .accessibilityHidden(true)
-            VStack(alignment: .leading, spacing: 4) {
-                Text(name).font(.headline)
-                Text(detail).font(.subheadline).foregroundStyle(.secondary)
-            }
-            Spacer(minLength: 8)
-            trailing
+    @ViewBuilder private var connectControl: some View {
+        if model.healthConnected {
+            Label("Connected", systemImage: "checkmark")
+                .font(.nouriCaption.weight(.semibold))
+                .foregroundStyle(Color.nouriOliveInk)
+        } else {
+            Button("Connect") { Task { await model.connectHealth() } }
+                .font(.nouriHeadline)
+                .foregroundStyle(Color.nouriOnAccent)
+                .padding(.horizontal, NouriSpacing.md)
+                .padding(.vertical, NouriSpacing.sm)
+                .background(Color.nouriAccent, in: Capsule())
+                .disabled(model.isConnectingHealth)
         }
-        .padding(16)
-        .background(.quaternary.opacity(0.5), in: RoundedRectangle(cornerRadius: 16))
-        .accessibilityElement(children: .combine)
     }
 }
 
