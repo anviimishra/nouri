@@ -10,11 +10,9 @@ final class ContrastTests: XCTestCase {
         XCTAssertGreaterThanOrEqual(dark, 4.5, "\(name) dark: \(dark)", file: file, line: line)
     }
 
-    func testTextOnCanvasAndGlows() {
-        for bg in [NouriPalette.canvas, NouriPalette.canvasGlowWarm, NouriPalette.canvasGlowCool] {
-            assertAA(NouriPalette.textPrimary, on: bg, "primary text")
-            assertAA(NouriPalette.textSecondary, on: bg, "secondary text")
-        }
+    func testTextOnCanvas() {
+        assertAA(NouriPalette.textPrimary, on: NouriPalette.canvas, "primary text")
+        assertAA(NouriPalette.textSecondary, on: NouriPalette.canvas, "secondary text")
     }
 
     func testTextOnCard() {
@@ -31,12 +29,12 @@ final class ContrastTests: XCTestCase {
 
     func testButtonLabels() {
         assertAA(NouriPalette.onAccent, on: NouriPalette.accent, "primary button label")
-        assertAA(NouriPalette.accent, on: NouriPalette.canvas, "secondary button label")
+        assertAA(NouriPalette.textSecondary, on: NouriPalette.canvas, "text link label")
     }
 
     func testBrandColorsAreUsedExactly() {
         XCTAssertEqual(NouriPalette.canvas.light, RGB(0xF6F0E7))
-        XCTAssertEqual(NouriPalette.canvasGlowWarm.light, RGB(0xE6D6C2))
+        XCTAssertEqual(NouriPalette.sand.light, RGB(0xE6D6C2))
         XCTAssertEqual(NouriPalette.clay.light, RGB(0xC77D5B))
         XCTAssertEqual(NouriPalette.olive.light, RGB(0x89916B))
         XCTAssertEqual(NouriPalette.textPrimary.light, RGB(0x343D30))

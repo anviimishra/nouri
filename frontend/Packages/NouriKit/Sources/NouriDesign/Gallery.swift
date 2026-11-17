@@ -1,50 +1,40 @@
 import SwiftUI
 
-/// Every NouriDesign component in one place, for previews and visual review.
+/// A sample screen built only from NouriDesign pieces: hero, serif headline, one line of
+/// copy, page dots, one primary action, one text link. New screens should feel like this.
 public struct NouriGallery: View {
-    @State private var step = 2
+    @State private var step = 1
 
     public init() {}
 
     public var body: some View {
         ZStack {
             NouriBackground()
-            ScrollView {
-                VStack(alignment: .leading, spacing: NouriSpacing.lg) {
-                    VStack(alignment: .leading, spacing: NouriSpacing.sm) {
-                        Text("Nouri design").font(.nouriDisplay).foregroundStyle(Color.nouriText)
-                        Text("Soft wellness tokens and components.")
-                            .font(.nouriBody).foregroundStyle(Color.nouriTextSecondary)
-                    }
+            VStack(spacing: NouriSpacing.lg) {
+                MetricPinsHero()
+                    .frame(maxHeight: .infinity)
 
-                    StepProgress(current: step, total: 4)
-
-                    NouriCard {
-                        HStack(spacing: NouriSpacing.md) {
-                            IconBadge(systemImage: "moon.zzz.fill", tint: .nouriOliveInk)
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("Sleep").font(.nouriHeadline).foregroundStyle(Color.nouriText)
-                                Text("7h 12m last night").font(.nouriCaption).foregroundStyle(Color.nouriTextSecondary)
-                            }
-                        }
-                    }
-
-                    NouriCard {
-                        HStack(spacing: NouriSpacing.md) {
-                            IconBadge(systemImage: "heart.fill", tint: .nouriClayInk)
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("Resting heart rate").font(.nouriHeadline).foregroundStyle(Color.nouriText)
-                                Text("54 bpm, 2 lower than last month").font(.nouriCaption).foregroundStyle(Color.nouriTextSecondary)
-                            }
-                        }
-                    }
-
-                    Button("Next step") { step = step % 4 + 1 }.buttonStyle(.nouriPrimary)
-                    Button("Skip for now") {}.buttonStyle(.nouriSecondary)
-                    Button("Disabled") {}.buttonStyle(.nouriPrimary).disabled(true)
+                VStack(spacing: NouriSpacing.sm) {
+                    Text("Ask")
+                        .font(.nouriDisplay)
+                        .foregroundStyle(Color.nouriText)
+                    Text("Your sleep, workouts, and heart in one place. Ask about any of it in plain words.")
+                        .font(.nouriBody)
+                        .foregroundStyle(Color.nouriTextSecondary)
+                        .multilineTextAlignment(.center)
                 }
-                .padding(NouriSpacing.lg)
+
+                PageDots(current: step, total: 3)
+
+                VStack(spacing: NouriSpacing.xs) {
+                    Button("Get started") { step = step % 3 + 1 }
+                        .buttonStyle(.nouriPrimary)
+                    Button("Skip for now") {}
+                        .buttonStyle(.nouriLink)
+                }
             }
+            .padding(.horizontal, NouriSpacing.xl)
+            .padding(.bottom, NouriSpacing.md)
         }
     }
 }

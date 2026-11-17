@@ -61,8 +61,8 @@ public enum NouriBrand {
 /// icons use deeper "ink" shades of them to stay readable (WCAG AA, see ContrastTests).
 public enum NouriPalette {
     public static let canvas = ColorToken(light: NouriBrand.cream, dark: RGB(0x1E241C))
-    public static let canvasGlowWarm = ColorToken(light: NouriBrand.sand, dark: RGB(0x3A2C22))
-    public static let canvasGlowCool = ColorToken(light: RGB(0xD5D4C2), dark: RGB(0x2C3324))
+    /// Hero pins and quiet fills.
+    public static let sand = ColorToken(light: NouriBrand.sand, dark: RGB(0x3A3A2E))
     public static let textPrimary = ColorToken(light: NouriBrand.forest, dark: NouriBrand.cream)
     public static let textSecondary = ColorToken(light: RGB(0x525A4B), dark: RGB(0xC9BFAF))
     /// Buttons and progress: forest by day, sand by night.
@@ -81,6 +81,7 @@ public extension Color {
     static let nouriTextSecondary = NouriPalette.textSecondary.color
     static let nouriAccent = NouriPalette.accent.color
     static let nouriOnAccent = NouriPalette.onAccent.color
+    static let nouriSand = NouriPalette.sand.color
     static let nouriClay = NouriPalette.clay.color
     static let nouriClayInk = NouriPalette.clayInk.color
     static let nouriOlive = NouriPalette.olive.color
@@ -101,11 +102,12 @@ public enum NouriRadius {
     public static let badge: CGFloat = 14
 }
 
-/// Rounded type scale. Built on text styles, so Dynamic Type still works.
+/// Serif headlines (New York, built into iOS) over SF Pro for everything else.
+/// Built on text styles, so Dynamic Type still works.
 public extension Font {
-    static let nouriDisplay = Font.system(.largeTitle, design: .rounded, weight: .bold)
-    static let nouriTitle = Font.system(.title2, design: .rounded, weight: .semibold)
-    static let nouriHeadline = Font.system(.headline, design: .rounded, weight: .semibold)
-    static let nouriBody = Font.system(.body, design: .rounded)
-    static let nouriCaption = Font.system(.subheadline, design: .rounded)
+    static let nouriDisplay = Font.system(.largeTitle, design: .serif, weight: .bold)
+    static let nouriTitle = Font.system(.title, design: .serif, weight: .bold)
+    static let nouriHeadline = Font.system(.headline, weight: .semibold)
+    static let nouriBody = Font.system(.body)
+    static let nouriCaption = Font.system(.subheadline)
 }

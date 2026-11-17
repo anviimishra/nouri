@@ -2,9 +2,10 @@ import SwiftUI
 import Pow
 import NouriDesign
 
-/// Pow effects, toned down for a calm app and skipped entirely with Reduce Motion.
+/// Pow effects, kept slow and subtle, and skipped entirely with Reduce Motion.
+/// Use only for small moments of success, such as a data source connecting.
 extension View {
-    /// A soft shine across the view when `value` changes (e.g. a source connects).
+    /// One slow, soft light sweep across the view when `value` changes.
     func nouriShine(value: some Equatable) -> some View {
         modifier(ShineOnChange(value: value))
     }
@@ -18,7 +19,7 @@ private struct ShineOnChange<Value: Equatable>: ViewModifier {
         if reduceMotion {
             content
         } else {
-            content.changeEffect(.shine(duration: 0.9), value: value)
+            content.changeEffect(.shine(duration: 1.6), value: value)
         }
     }
 }
@@ -26,16 +27,8 @@ private struct ShineOnChange<Value: Equatable>: ViewModifier {
 #if DEBUG
 /// Launch with `-gallery` to review the design system in the app.
 struct DesignGalleryScreen: View {
-    @State private var connected = false
-
     var body: some View {
-        ZStack(alignment: .bottom) {
-            NouriGallery()
-            Button(connected ? "Connected" : "Try the shine effect") { connected.toggle() }
-                .buttonStyle(.nouriPrimary)
-                .nouriShine(value: connected)
-                .padding(NouriSpacing.lg)
-        }
+        NouriGallery()
     }
 }
 #endif
