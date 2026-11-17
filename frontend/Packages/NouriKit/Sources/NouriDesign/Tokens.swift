@@ -102,12 +102,12 @@ public enum NouriRadius {
     public static let badge: CGFloat = 14
 }
 
-/// Serif headlines (New York, built into iOS) over SF Pro for everything else.
-/// Built on text styles, so Dynamic Type still works.
+/// SF Pro Rounded throughout, kept neutral: semibold headlines (not heavy bold),
+/// regular body. Built on text styles, so Dynamic Type still works.
 public extension Font {
-    static let nouriDisplay = Font.system(.largeTitle, design: .serif, weight: .bold)
-    static let nouriTitle = Font.system(.title, design: .serif, weight: .bold)
-    static let nouriHeadline = Font.system(.headline, weight: .semibold)
-    static let nouriBody = Font.system(.body)
-    static let nouriCaption = Font.system(.subheadline)
+    static let nouriDisplay = Font.system(.largeTitle, design: .rounded, weight: .semibold)
+    static let nouriTitle = Font.system(.title, design: .rounded, weight: .semibold)
+    static let nouriHeadline = Font.system(.headline, design: .rounded, weight: .semibold)
+    static let nouriBody = Font.system(.body, design: .rounded)
+    static let nouriCaption = Font.system(.subheadline, design: .rounded)
 }

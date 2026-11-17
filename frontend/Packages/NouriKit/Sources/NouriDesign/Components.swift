@@ -61,7 +61,7 @@ public struct IconBadge: View {
 
     public var body: some View {
         Image(systemName: systemImage)
-            .font(.system(.body, weight: .semibold))
+            .font(.system(.body, design: .rounded, weight: .semibold))
             .foregroundStyle(tint)
             .frame(width: size, height: size)
             .background(tint.opacity(0.12), in: RoundedRectangle(cornerRadius: NouriRadius.badge, style: .continuous))
@@ -144,7 +144,7 @@ private struct PinView: View {
     var body: some View {
         VStack(spacing: -4) {
             Text(label)
-                .font(.system(.subheadline, weight: .semibold).monospacedDigit())
+                .font(.system(.subheadline, design: .rounded, weight: .semibold).monospacedDigit())
                 .foregroundStyle(Color.nouriOnAccent)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
@@ -190,7 +190,7 @@ public struct NouriLinkButtonStyle: ButtonStyle {
 
     public func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(.system(.body, weight: .semibold))
+            .font(.system(.body, design: .rounded, weight: .semibold))
             .foregroundStyle(Color.nouriTextSecondary)
             .padding(.vertical, 10)
             .contentShape(Rectangle())
