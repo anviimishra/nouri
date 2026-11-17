@@ -102,11 +102,11 @@ public enum NouriRadius {
     public static let badge: CGFloat = 14
 }
 
-/// SF Pro Rounded throughout, kept neutral: semibold headlines (not heavy bold),
+/// SF Pro Rounded throughout, kept neutral: bold headlines, semibold labels,
 /// regular body. Built on text styles, so Dynamic Type still works.
 public extension Font {
-    static let nouriDisplay = Font.system(.largeTitle, design: .rounded, weight: .semibold)
-    static let nouriTitle = Font.system(.title, design: .rounded, weight: .semibold)
+    static let nouriDisplay = Font.system(.largeTitle, design: .rounded, weight: .bold)
+    static let nouriTitle = Font.system(.title, design: .rounded, weight: .bold)
     static let nouriHeadline = Font.system(.headline, design: .rounded, weight: .semibold)
     static let nouriBody = Font.system(.body, design: .rounded)
     static let nouriCaption = Font.system(.subheadline, design: .rounded)
