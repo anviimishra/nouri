@@ -8,15 +8,12 @@ let package = Package(
         .library(name: "NouriKit", targets: ["NouriKit"]),
     ],
     dependencies: [
-        // Requires Xcode 16+ (Swift 6). Uncomment after upgrading Xcode:
-        // .package(url: "https://github.com/supabase/supabase-swift.git", from: "2.0.0"),
+        .package(url: "https://github.com/supabase/supabase-swift.git", from: "2.0.0"),
     ],
     targets: [
         .target(
             name: "NouriKit",
-            dependencies: [
-                // .product(name: "Supabase", package: "supabase-swift"),
-            ]
+            dependencies: [.product(name: "Supabase", package: "supabase-swift")]
         ),
         .testTarget(name: "NouriKitTests", dependencies: ["NouriKit"]),
     ]
