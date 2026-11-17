@@ -24,6 +24,11 @@ public final class LocalProfileRepository: ProfileRepository, @unchecked Sendabl
     public func markOnboarded(at date: Date) async throws {
         defaults.set(date, forKey: key)
     }
+
+    /// Forgets the onboarded flag, so the next launch shows onboarding again.
+    public func resetOnboarding() {
+        defaults.removeObject(forKey: key)
+    }
 }
 
 /// Reads and writes `profiles.onboarded_at` for the signed-in user. RLS limits it to their own row.

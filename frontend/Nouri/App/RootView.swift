@@ -1,5 +1,6 @@
 import SwiftUI
 import NouriKit
+import NouriDesign
 
 /// Routes to onboarding or Home based on the user's onboarding state.
 /// Sign-in routing is added in #11 / #12.
@@ -25,10 +26,17 @@ struct RootView: View {
             case .onboarding:
                 if let onboarding { OnboardingFlow(model: onboarding) }
             case .home:
-                HomePlaceholderView()
+                HomePlaceholderView(onRestartOnboarding: restartOnboarding)
             }
         }
         .task { await load() }
+    }
+
+    /// Debug helper: forget the onboarded flag and show onboarding again.
+    private func restartOnboarding() {
+        (profiles as? LocalProfileRepository)?.resetOnboarding()
+        phase = .loading
+        Task { await load() }
     }
 
     private func load() async {
@@ -70,8 +78,31 @@ private enum DebugLaunch {
 
 /// Stand-in until the Ask screen (#18).
 private struct HomePlaceholderView: View {
+    let onRestartOnboarding: () -> Void
+
     var body: some View {
-        Text("Nouri").font(.largeTitle.bold())
+        ZStack {
+            NouriBackground()
+            VStack(spacing: NouriSpacing.sm) {
+                Text("nouri")
+                    .font(.system(.title3, design: .rounded, weight: .bold))
+                    .foregroundStyle(Color.nouriText)
+                    .padding(.bottom, NouriSpacing.lg)
+                Text("You're in")
+                    .font(.nouriDisplay)
+                    .foregroundStyle(Color.nouriText)
+                Text("This is Home for now. The Ask screen, where you'll chat about your health data, is coming next.")
+                    .font(.nouriBody)
+                    .foregroundStyle(Color.nouriTextSecondary)
+                    .multilineTextAlignment(.center)
+                #if DEBUG
+                Button("Restart onboarding", action: onRestartOnboarding)
+                    .buttonStyle(.nouriLink)
+                    .padding(.top, NouriSpacing.lg)
+                #endif
+            }
+            .padding(.horizontal, NouriSpacing.xl)
+        }
     }
 }
 
