@@ -1,4 +1,5 @@
-// Renders the Nouri app icon (concept E) as a 1024×1024 opaque PNG.
+// Renders the Nouri app icon as a 1024×1024 opaque PNG: a cream speech bubble on forest
+// green holding a forest lowercase "n" in New York (Apple's serif).
 //
 //   cd frontend && swift Design/AppIcon/render.swift
 //
@@ -8,7 +9,6 @@ import AppKit
 
 let forest = Color(red: 0x34 / 255, green: 0x3D / 255, blue: 0x30 / 255)
 let cream = Color(red: 0xF6 / 255, green: 0xF0 / 255, blue: 0xE7 / 255)
-let clay = Color(red: 0xC7 / 255, green: 0x7D / 255, blue: 0x5B / 255)
 
 /// Speech bubble: one path, so the tail joins the body with no seam or notch.
 struct BubbleShape: Shape {
@@ -40,13 +40,9 @@ struct NouriIcon: View {
                 .frame(width: 680, height: 600)
                 .offset(y: 30)
             Text("n")
-                .font(.system(size: 400, weight: .bold, design: .rounded))
+                .font(.system(size: 440, weight: .bold, design: .serif))
                 .foregroundStyle(forest)
-                .offset(y: -55)
-            Circle()
-                .fill(clay)
-                .frame(width: 92)
-                .offset(x: 170, y: -150)
+                .offset(y: -78)
         }
         .frame(width: 1024, height: 1024)
     }
