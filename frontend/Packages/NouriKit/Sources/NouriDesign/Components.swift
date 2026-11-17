@@ -1,6 +1,7 @@
 import SwiftUI
 
-/// Warm canvas with two soft, static glows. Calm by design: nothing moves.
+/// Cream canvas with soft sand/olive glows and two blurred clay and olive blobs for glass to
+/// refract. Calm by design: nothing moves. Blobs stay faint (15%) so text over them passes AA.
 public struct NouriBackground: View {
     public init() {}
 
@@ -11,12 +12,22 @@ public struct NouriBackground: View {
                            center: .topTrailing, startRadius: 0, endRadius: 420)
             RadialGradient(colors: [NouriPalette.canvasGlowCool.color, .clear],
                            center: .bottomLeading, startRadius: 0, endRadius: 460)
+            GeometryReader { proxy in
+                Circle().fill(Color.nouriClay.opacity(0.15))
+                    .frame(width: 260, height: 260)
+                    .position(x: proxy.size.width * 0.85, y: proxy.size.height * 0.55)
+                Circle().fill(Color.nouriOlive.opacity(0.15))
+                    .frame(width: 240, height: 240)
+                    .position(x: proxy.size.width * 0.1, y: proxy.size.height * 0.4)
+            }
+            .blur(radius: 50)
         }
         .ignoresSafeArea()
+        .accessibilityHidden(true)
     }
 }
 
-/// Rounded card with a soft border and a light shadow.
+/// Rounded glass card: Liquid Glass on iOS/watchOS 26+, frosted material before that.
 public struct NouriCard<Content: View>: View {
     private let content: Content
 
@@ -28,10 +39,30 @@ public struct NouriCard<Content: View>: View {
         content
             .padding(NouriSpacing.md + 4)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color.nouriCard.opacity(0.85), in: RoundedRectangle(cornerRadius: NouriRadius.card, style: .continuous))
-            .overlay(RoundedRectangle(cornerRadius: NouriRadius.card, style: .continuous)
-                .strokeBorder(Color.nouriText.opacity(0.06)))
-            .shadow(color: .black.opacity(0.05), radius: 16, y: 6)
+            .nouriGlass(in: RoundedRectangle(cornerRadius: NouriRadius.card, style: .continuous))
+    }
+}
+
+public extension View {
+    /// Glass surface that keeps the iOS 17 minimum: native Liquid Glass where available.
+    func nouriGlass(in shape: some Shape) -> some View {
+        modifier(GlassSurface(shape: shape))
+    }
+}
+
+private struct GlassSurface<S: Shape>: ViewModifier {
+    let shape: S
+
+    func body(content: Content) -> some View {
+        if #available(iOS 26, watchOS 26, macOS 26, *) {
+            content.glassEffect(.regular.tint(Color.nouriCard.opacity(0.45)), in: shape)
+        } else {
+            content
+                .background(Color.nouriCard.opacity(0.55), in: shape)
+                .background(.ultraThinMaterial, in: shape)
+                .overlay(shape.stroke(Color.white.opacity(0.35), lineWidth: 1))
+                .shadow(color: .black.opacity(0.06), radius: 18, y: 8)
+        }
     }
 }
 

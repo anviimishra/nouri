@@ -10,15 +10,11 @@ final class ContrastTests: XCTestCase {
         XCTAssertGreaterThanOrEqual(dark, 4.5, "\(name) dark: \(dark)", file: file, line: line)
     }
 
-    func testTextOnCanvas() {
-        assertAA(NouriPalette.textPrimary, on: NouriPalette.canvas, "primary text")
-        assertAA(NouriPalette.textSecondary, on: NouriPalette.canvas, "secondary text")
-        assertAA(NouriPalette.accent, on: NouriPalette.canvas, "accent text")
-    }
-
-    func testTextOnGlows() {
-        assertAA(NouriPalette.textSecondary, on: NouriPalette.canvasGlowWarm, "secondary on warm glow")
-        assertAA(NouriPalette.textSecondary, on: NouriPalette.canvasGlowCool, "secondary on cool glow")
+    func testTextOnCanvasAndGlows() {
+        for bg in [NouriPalette.canvas, NouriPalette.canvasGlowWarm, NouriPalette.canvasGlowCool] {
+            assertAA(NouriPalette.textPrimary, on: bg, "primary text")
+            assertAA(NouriPalette.textSecondary, on: bg, "secondary text")
+        }
     }
 
     func testTextOnCard() {
@@ -26,9 +22,24 @@ final class ContrastTests: XCTestCase {
         assertAA(NouriPalette.textSecondary, on: NouriPalette.card, "secondary on card")
     }
 
+    func testInkShadesOnCardAndCanvas() {
+        for bg in [NouriPalette.canvas, NouriPalette.card] {
+            assertAA(NouriPalette.clayInk, on: bg, "clay ink")
+            assertAA(NouriPalette.oliveInk, on: bg, "olive ink")
+        }
+    }
+
     func testButtonLabels() {
         assertAA(NouriPalette.onAccent, on: NouriPalette.accent, "primary button label")
-        assertAA(NouriPalette.peach, on: NouriPalette.card, "peach accent on card")
+        assertAA(NouriPalette.accent, on: NouriPalette.canvas, "secondary button label")
+    }
+
+    func testBrandColorsAreUsedExactly() {
+        XCTAssertEqual(NouriPalette.canvas.light, RGB(0xF6F0E7))
+        XCTAssertEqual(NouriPalette.canvasGlowWarm.light, RGB(0xE6D6C2))
+        XCTAssertEqual(NouriPalette.clay.light, RGB(0xC77D5B))
+        XCTAssertEqual(NouriPalette.olive.light, RGB(0x89916B))
+        XCTAssertEqual(NouriPalette.textPrimary.light, RGB(0x343D30))
     }
 
     func testContrastMathMatchesWCAG() {

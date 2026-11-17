@@ -21,7 +21,7 @@ public struct NouriGallery: View {
 
                     NouriCard {
                         HStack(spacing: NouriSpacing.md) {
-                            IconBadge(systemImage: "moon.zzz.fill")
+                            IconBadge(systemImage: "moon.zzz.fill", tint: .nouriOliveInk)
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("Sleep").font(.nouriHeadline).foregroundStyle(Color.nouriText)
                                 Text("7h 12m last night").font(.nouriCaption).foregroundStyle(Color.nouriTextSecondary)
@@ -31,7 +31,7 @@ public struct NouriGallery: View {
 
                     NouriCard {
                         HStack(spacing: NouriSpacing.md) {
-                            IconBadge(systemImage: "heart.fill", tint: .nouriPeach)
+                            IconBadge(systemImage: "heart.fill", tint: .nouriClayInk)
                             VStack(alignment: .leading, spacing: 2) {
                                 Text("Resting heart rate").font(.nouriHeadline).foregroundStyle(Color.nouriText)
                                 Text("54 bpm, 2 lower than last month").font(.nouriCaption).foregroundStyle(Color.nouriTextSecondary)
