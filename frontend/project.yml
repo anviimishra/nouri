@@ -13,6 +13,9 @@ configFiles:
 packages:
   NouriKit:
     path: Packages/NouriKit
+  Pow:
+    url: https://github.com/EmergeTools/Pow
+    from: 1.0.6
 targets:
   Nouri:
     type: application
@@ -20,6 +23,8 @@ targets:
     sources: [Nouri]
     dependencies:
       - package: NouriKit
+        products: [NouriKit, NouriDesign]
+      - package: Pow
       - target: NouriWatch
     entitlements:
       path: Nouri/Nouri.entitlements   # generated from these properties; edit here, not the file
@@ -40,6 +45,7 @@ targets:
     sources: [NouriWatch]
     dependencies:
       - package: NouriKit
+        products: [NouriKit, NouriDesign]
     entitlements:
       path: NouriWatch/NouriWatch.entitlements   # generated from these properties
       properties:
